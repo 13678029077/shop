@@ -1,5 +1,4 @@
-<?=\yii\bootstrap\Html::a('添加品牌',['brand/add'],['class'=>'btn btn-info btn-sm'])?><br/><br/>
-<?=\yii\bootstrap\Html::a('回收站',['brand/removed'],['class'=>'btn btn-info btn-sm btn-warning','style'=>'float:right'])?><br/><br/>
+<?=\yii\bootstrap\Html::a('返回首页',['brand/index'],['class'=>'btn btn-info btn-sm'])?><br/><br/>
     <table class="table table-bordered table-hover table-striped">
         <tr>
             <th>ID</th>
@@ -19,16 +18,8 @@
                 <td><?=$brand->sort?></td>
                 <td><?=\backend\models\Brand::$status[$brand->status]?></td>
                 <td>
-                    <?=\yii\bootstrap\Html::a('',['brand/edit','id'=>$brand->id],['class'=>'glyphicon glyphicon-pencil btn btn-primary btn-xs'])?>&nbsp&nbsp
-                    <?=\yii\bootstrap\Html::a('',['brand/delete','id'=>$brand->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>
+                    <?=\yii\bootstrap\Html::a('还原',['brand/rechange','id'=>$brand->id],['class'=>' btn btn-primary btn-xs'])?>
                 </td>
             </tr>
         <?php endforeach;?>
     </table>
-    <!--
-    --><?php /*echo \yii\widgets\LinkPager::widget([
-            'pagination'=>$pages,
-            'nextPageLabel'=>'下一页',
-            'prevPageLabel'=>'上一页',
-            ]);
-*/?>
