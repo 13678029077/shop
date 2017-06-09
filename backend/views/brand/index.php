@@ -25,10 +25,10 @@
             </tr>
         <?php endforeach;?>
     </table>
-    <!--
-    --><?php /*echo \yii\widgets\LinkPager::widget([
-            'pagination'=>$pages,
-            'nextPageLabel'=>'下一页',
-            'prevPageLabel'=>'上一页',
-            ]);
-*/?>
+
+<?php
+echo \yii\widgets\LinkPager::widget([
+        'pagination'=>$page,
+        'nextPageLabel'=>'下一页',
+        'prevPageLabel'=>'上一页',
+]);

@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\Article_Category;
+use yii\data\Pagination;
 
 class Article_categoryController extends \yii\web\Controller
 {
@@ -22,8 +23,16 @@ class Article_categoryController extends \yii\web\Controller
     //显示分类列表
     public function actionIndex(){
         //['!=','status',-1]
-        $cates =Article_Category::find()->all();
-        return $this->render('index',['cates'=>$cates]);
+        //分页
+        $query = Article_Category::find();
+        $count = $query->count();
+        $page = new Pagination([
+            'totalCount'=>$count,
+            'defaultPageSize'=>3,
+        ]);
+        $cates = $query->offset($page->offset)->limit($page->limit)->all();
+       // $cates =Article_Category::find()->all();
+        return $this->render('index',['cates'=>$cates,'page'=>$page]);
     }
 
     //回收站列表

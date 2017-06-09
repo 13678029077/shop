@@ -34,7 +34,7 @@ class Brand extends ActiveRecord
     public function rules()
     {
         return [
-            //['name','required'],
+            [['name','sort','status'],'required'],
             [['intro'], 'string'],
             [['sort', 'status'], 'integer'],
             [['name'], 'string', 'max' => 50],
