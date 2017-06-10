@@ -11,11 +11,7 @@ echo $form->field($model,'logo')->hiddenInput(['id'=>'logo']);
 //echo $form->field($model,'logoFile')->fileInput(['id' => 'test']);
 echo \yii\bootstrap\Html::fileInput('test', NULL, ['id' => 'test']);
 
-if($model->logo){
-    echo \yii\bootstrap\Html::img('@web'.$model->logo,['id'=>'img_logo','height'=>'100']);
-}else{
-    echo \yii\bootstrap\Html::img('',['style'=>'display:none','id'=>'img_logo','height'=>'50']);
-}
+
 //外部TAG
 echo Uploadify::widget([
     'url' => yii\helpers\Url::to(['s-upload']),
@@ -48,7 +44,11 @@ EOF
         ),
     ]
 ]);
-
+if($model->logo){
+    echo \yii\bootstrap\Html::img('@web'.$model->logo,['id'=>'img_logo','height'=>'100']);
+}else{
+    echo \yii\bootstrap\Html::img('',['style'=>'display:none','id'=>'img_logo','height'=>'50']);
+}
 
 echo $form->field($model,'status',['inline'=>true])->radioList(['1'=>'正常','0'=>'隐藏']);
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);

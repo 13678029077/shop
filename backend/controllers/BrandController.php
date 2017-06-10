@@ -1,9 +1,11 @@
 <?php
 namespace backend\controllers;
 
+use backend\components\Qiniu;
 use backend\models\Brand;
 use yii\data\Pagination;
 use yii\web\UploadedFile;
+
 use xj\uploadify\UploadAction;
 class BrandController extends \yii\web\Controller
 {
@@ -125,15 +127,34 @@ class BrandController extends \yii\web\Controller
                 'afterValidate' => function (UploadAction $action) {},
                 'beforeSave' => function (UploadAction $action) {},
                 'afterSave' => function (UploadAction $action) {
-                    $action->output['fileUrl'] = $action->getWebUrl();
-                    $action->getFilename(); // "image/yyyymmddtimerand.jpg"
-                    $action->getWebUrl(); //  "baseUrl + filename, /upload/image/yyyymmddtimerand.jpg"
-                    $action->getSavePath(); // "/var/www/htdocs/upload/image/yyyymmddtimerand.jpg"
+                    $imgurl = $action->getWebUrl();
+                    //调用七牛云，将文件上传到七牛云
+                    $qiniu = \Yii::$app->qiniu;//七牛对象
+                    $qiniu->uploadfile(\Yii::getAlias('@webroot'). $imgurl,$imgurl);
+                    $url = $qiniu->getLink($imgurl);//得到文件在七牛云上的地址
+                    $action->output['fileUrl'] = $url;//输出文件地址
+
+                  //  $action->getFilename(); // "image/yyyymmddtimerand.jpg"
+                   // $action->getWebUrl(); //  "baseUrl + filename, /upload/image/yyyymmddtimerand.jpg"
+                  //  $action->getSavePath(); // "/var/www/htdocs/upload/image/yyyymmddtimerand.jpg"
                 },
             ],
         ];
     }
+/*
+    public function actionTest(){
+        $ak = '6GX6pflkyaH-jaOJya12fIEhZo6I0TGpl_TQ7wGj';
+        $sk = 'qnW_O0gIMmma4PCuDbCOhucxYMoHdMRiN48ROog1';
+        $domain = 'http://or9ocwffy.bkt.clouddn.com';//存储的域名
+        $bucket = 'myshop';//存储空间名
 
-
+        $qiniu = new Qiniu($ak, $sk,$domain, $bucket);
+        //要上传的文件
+        $filename = \Yii::getAlias('@webroot').'/upload/1.jpg';
+        $key = '1.jpg';
+        $re  = $qiniu->uploadFile($filename,$key);
+        $url = $qiniu->getLink($key);//得到文件地址
+        var_dump($url);
+    }*/
 
 }

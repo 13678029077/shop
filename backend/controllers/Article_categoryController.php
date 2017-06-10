@@ -25,14 +25,13 @@ class Article_categoryController extends \yii\web\Controller
         //['!=','status',-1]
         //分页
         $query = Article_Category::find();
-        $count = $query->count();
+        $count = $query->all();
         $page = new Pagination([
             'totalCount'=>$count,
-            'defaultPageSize'=>3,
+            'DefaultPageSize'
         ]);
-        $cates = $query->offset($page->offset)->limit($page->limit)->all();
-       // $cates =Article_Category::find()->all();
-        return $this->render('index',['cates'=>$cates,'page'=>$page]);
+        $cates =Article_Category::find()->all();
+        return $this->render('index',['cates'=>$cates]);
     }
 
     //回收站列表
