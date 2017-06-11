@@ -134,9 +134,6 @@ class BrandController extends \yii\web\Controller
                     $url = $qiniu->getLink($imgurl);//得到文件在七牛云上的地址
                     $action->output['fileUrl'] = $url;//输出文件地址
 
-                  //  $action->getFilename(); // "image/yyyymmddtimerand.jpg"
-                   // $action->getWebUrl(); //  "baseUrl + filename, /upload/image/yyyymmddtimerand.jpg"
-                  //  $action->getSavePath(); // "/var/www/htdocs/upload/image/yyyymmddtimerand.jpg"
                 },
             ],
         ];
