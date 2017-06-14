@@ -1,10 +1,8 @@
 <?php
 namespace backend\controllers;
 
-use backend\components\Qiniu;
 use backend\models\Brand;
 use yii\data\Pagination;
-use yii\web\UploadedFile;
 
 use xj\uploadify\UploadAction;
 class BrandController extends \yii\web\Controller
@@ -20,6 +18,7 @@ class BrandController extends \yii\web\Controller
                         $model->logoFile->saveAs(\Yii::getAlias('@webroot').$filename,false);//保存图片到指定路径
                         $model->logo = $filename;
                     }*/
+                 //  var_dump($model);exit;
                     $model->save();//保存到数据库
                     \Yii::$app->session->setFlash('success','品牌添加成功');
                     return $this->redirect(['brand/index']);//跳转页面

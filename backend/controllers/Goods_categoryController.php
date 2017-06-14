@@ -11,22 +11,9 @@ class Goods_categoryController extends \yii\web\Controller
 {
     //1.商品分类列表
     public function actionIndex(){
-        //分页
-        $query = Goods_Category::find();
-        $total = $query->count();//总条数
-        $page = new Pagination([
-            'totalCount'=>$total,
-            'defaultPageSize'=>3,// 每页显示3条
-        ]);
-        $cates  = $query->offset($page->offset)->limit($page->limit)->all();
-
-
         //查询出所有分类
-        //$cates = Goods_Category::find()->orderBy('depth')->asArray()->all();
-        foreach ($cates as &$v){
-            $v['name'] = str_repeat('—',$v['depth']*4).$v['name'];
-        }
-        return $this->render('index',['cates'=>$cates,'page'=>$page]);
+        $cates = Goods_Category::find()->orderBy('tree,lft')->all();
+        return $this->render('index',['cates'=>$cates]);
     }
 
 
@@ -56,7 +43,7 @@ class Goods_categoryController extends \yii\web\Controller
     //3.修改商品分类
     public function actionEdit($id){
         $model = Goods_Category::findOne(['id' => $id]);
-        $son = $model->leaves()->all();//找到所有子孙
+        //$son = $model->leaves()->all();//找到所有子孙
         //先判断有没有该分类
         if($model == null){
             throw new NotFoundHttpException('分类不存在');
@@ -64,10 +51,15 @@ class Goods_categoryController extends \yii\web\Controller
         if( $model->load(\Yii::$app->request->post()) && $model->validate()){
             //判断是否添加的一级分类
             if($model->parent_id == 0 ){
-                //添加一级分类
-                $model->makeroot();
+                if($model->getOldAttribute('parent_id')==0){
+                    $model->save();
+                }else{
+                    //添加一级分类
+                    $model->makeroot();
+                }
+
             }else{
-                //添加子孙分类，判断不能添加到自己的子孙分类里面
+                //添加子孙分类
                 $parent = Goods_Category::findOne(['id'=>$model->parent_id]); //找到父分类
                 $re = $model->prependTo($parent);//添加到上一级分类下面
             }

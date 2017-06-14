@@ -36,6 +36,7 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
+        ['label' => '商品列表', 'url' => ['/goods/index']],
         ['label' => '商品分类', 'url' => ['/goods_category/index']],
         ['label' => '品牌管理', 'url' => ['/brand/index']],
         ['label' => '文章管理', 'url' => ['/article/index']],

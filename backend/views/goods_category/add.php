@@ -46,7 +46,6 @@ $JS = new \yii\web\JsExpression(
         zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
         zTreeObj.expandAll(true);//展开子节点
         //获取修改的节点
-
         var node = zTreeObj.getNodeByParam("id",{$parent_id} , null);
         zTreeObj.selectNode(node);//修改时默认选中父节点分类
 JS
