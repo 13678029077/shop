@@ -11,10 +11,10 @@ class UserController extends \yii\web\Controller
 {
     public function actionInit(){
         $user = new User();
-        $user->username = 'admin';
+        $user->username = 'admin222';
         $password= '123456';
         $user->password_hash = \Yii::$app->security->generatePasswordHash($password);
-       // $user->email = '123@123.123';
+        $user->email = '13423@123.123234';
 
         $user->save();
         return $this->redirect(['goods/index']);
