@@ -9,6 +9,16 @@ use yii\web\Cookie;
 
 class UserController extends \yii\web\Controller
 {
+    public function actionInit(){
+        $user = new User();
+        $user->username = 'admin';
+        $password= '123456';
+        $user->password_hash = \Yii::$app->security->generatePasswordHash($password);
+       // $user->email = '123@123.123';
+
+        $user->save();
+        return $this->redirect(['goods/index']);
+    }
 
     //用户注册
     public function actionRegister(){
@@ -138,12 +148,12 @@ class UserController extends \yii\web\Controller
                       [//未认证用户允许执行的操作
 
                           'allow'=>true,//是否允许执行
-                          'actions'=>['register','login','captcha','login1'],//指定操作
+                          'actions'=>['register','login','captcha','login1','init'],//指定操作
                           'roles'=>['?'],//角色？表示未认证用户
                       ],
                       [//已认证用户允许执行的操作
                           'allow'=>true,//是否允许执行
-                          'actions'=>['login1','index','register','delete','edit','login','captcha','logout'],//指定操作
+                          'actions'=>['login1','index','register','init','delete','edit','login','captcha','logout'],//指定操作
                           'roles'=>['@'],//角色 @表示已认证用户
                         /*  'matchCallback'=>function(){
                               //return date('j')==6;
@@ -158,14 +168,5 @@ class UserController extends \yii\web\Controller
       }
 
 
-    public function actionInit(){
-        $user = new User();
-        $user->username = 'admin';
-        $user->password= '123456';
-        $user->password_hash = \Yii::$app->security->generatePasswordHash($user->password);
-        $user->email = '123@123.123';
 
-        $user->save();
-        return $this->redirect(['goods/index']);
-    }
 }
