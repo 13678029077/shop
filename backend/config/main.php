@@ -18,8 +18,10 @@ return [
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
+            'loginUrl' => ['user/login'],//无权限默认tiaozhuan
+            //'identityClass' => 'common\models\User',
+            'identityClass' => \backend\models\User::className(),
+            'enableAutoLogin' => true,//基于cookie自动登录
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'session' => [

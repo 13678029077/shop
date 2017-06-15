@@ -33,7 +33,7 @@ class GoodsController extends \yii\web\Controller
        if($min = \Yii::$app->request->get('min_price')){//按最小价格查询
             $query->andWhere(['>=','shop_price',$min]);
         }
-       if($max = \Yii::$app->request->get('max_price')){//按价最大格查询
+       if($max = \Yii::$app->request->get('max_price')){//按最大价格查询
             $query->andWhere(['<=','shop_price',$max]);
         }
 
@@ -69,7 +69,7 @@ class GoodsController extends \yii\web\Controller
                 $count = 0;//初始值为0计数，默认当天没有添加商品
                 if($day = Goods_day_count::findOne(['day'=> date('Y-m-d')])){//查询到当天如果有商品数据
                     $count += $day->count;//获取到原来的count值
-                    $model->sn = date('Ymd').substr($count +10000,-4);//获取到sn
+                    $model->sn = date('Ymd').substr($count +100000,-4);//获取到sn
                     $day->count = $count+1;//新的count值
                     $day->save();//更新数据表
                 }else{
@@ -204,6 +204,7 @@ class GoodsController extends \yii\web\Controller
     //商品图片相册展示
     public function actionPic_index($id){
         $model = Goods_pictures::find()->where(['goods_id'=>$id,'status'=>1])->all();//获得图片
+
         $good = Goods::findOne(['id'=>$id]);
         return $this->render('pic_index',['pictures'=>$model,'good'=>$good]);
     }
@@ -233,7 +234,7 @@ class GoodsController extends \yii\web\Controller
     }
 
 
-    //配置ueditor 参数
+    //配置ueditor 参数, 配置用uplodify批量上传图片
     public function actions(){
         return [
                 'upload' => [
@@ -280,17 +281,20 @@ class GoodsController extends \yii\web\Controller
                     'afterValidate' => function (UploadAction $action) {},
                     'beforeSave' => function (UploadAction $action) {},
                     'afterSave' => function (UploadAction $action) {
-                        $action->output['fileUrl'] = $action->getWebUrl();
-                        $action->getFilename(); // "image/yyyymmddtimerand.jpg"
-                        $action->getWebUrl(); //  "baseUrl + filename, /upload/image/yyyymmddtimerand.jpg"
-                        $action->getSavePath(); // "/var/www/htdocs/upload/image/yyyymmddtimerand.jpg"
+                       // $action->getFilename(); // "image/yyyymmddtimerand.jpg"
+                       // $action->getWebUrl(); //  "baseUrl + filename, /upload/image/yyyymmddtimerand.jpg"
+                       // $action->getSavePath(); // "/var/www/htdocs/upload/image/yyyymmddtimerand.jpg"
+                        $model = new Goods_pictures();
+                        $model->goods_id=\Yii::$app->request->post('goods_id');
+                        $model->img = $action->getWebUrl();
+                        $model->status=1;
+                        $model->save();
+                        $action->output['fileUrl'] = $action->getWebUrl();//输出图片地址
+
                     },
                 ],
 
         ];
     }
-
-
-
 
 }

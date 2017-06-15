@@ -1,4 +1,5 @@
 <!--//显示商品名-->
+
 <h2>商品名：
 <input type="text" disabled="disabled" value="<?=$good_name->name?>" style="font:24px/48px 微软雅黑;height:40px;background: lightblue;text-indent: 10px"><br/><br/>
 </h2>
@@ -6,7 +7,7 @@
 use yii\web\JsExpression;
 use xj\uploadify\Uploadify;
 
-
+echo '<div style="width:400px;float:left">';
 
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($model,'img')->hiddenInput(['id'=>'logo']);
@@ -19,7 +20,7 @@ echo Uploadify::widget([
     'csrf' => true,
     'renderTag' => false,
     'jsOptions' => [
-        'formData'=>['goods_id'=>$goods->id],
+        'formData'=>['goods_id'=>$good_name->id],
         'width' => 120,
         'height' => 40,
         'onUploadError' => new JsExpression(<<<EOF
@@ -36,9 +37,12 @@ function(file, data, response) {
     } else {
         console.log(data.fileUrl);
         //上传成功将地址写入img显示
-        $('#img_logo').attr('src',data.fileUrl).show();
+        $('#img_logo').attr('src',data.fileUrl);
         //地址写入img
-        $('#logo').val(data.fileUrl); 
+       /*// $('#logo').val(data.fileUrl); */
+        var html ='<img style="width:100px;height:80px;margin:10px;" src="'+data.fileUrl+'">';
+        $(html).appendTo( $('#box'));
+        
     }
 }
 EOF
@@ -52,8 +56,9 @@ if($model->img){
 }else{
     echo \yii\bootstrap\Html::img('',['style'=>'display:none','id'=>'img_logo','height'=>'200']).'<br/><br/>';
 }
-
-echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);
+echo \yii\bootstrap\Html::a('提 交',['goods/pic_index','id'=>$good_name->id],['class'=>'btn btn-info']);
+echo '</div>';
+echo '<div id="box" style="width:700px;float:right"></div>';
 
 \yii\bootstrap\ActiveForm::end();
 
