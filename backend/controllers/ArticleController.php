@@ -3,6 +3,7 @@ namespace backend\controllers;
 header('Content-type:text/html;charset=utf-8');
 namespace backend\controllers;
 
+use backend\components\RbacFilter;
 use backend\models\Article;
 use backend\models\Article_Category;
 use backend\models\Article_detail;
@@ -89,11 +90,20 @@ class ArticleController extends \yii\web\Controller
         return $this->render('add',['model'=>$model,'cates'=>$cates,'model2'=>$model2]);
     }
 
-    //文章内容也
+    //文章内容
     public function actionArticle_content($id){
         $title = Article::findOne(['id'=>$id]);//查询标题
         $content = Article_detail::findOne(['id'=>$id]);//查询内容
         return $this->render('article_content',['title'=>$title,'content'=>$content]);
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ],
+        ];
     }
 
 }

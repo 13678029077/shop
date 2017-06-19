@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\components\RbacFilter;
 use backend\models\Article_Category;
 use yii\data\Pagination;
 
@@ -24,12 +25,12 @@ class Article_categoryController extends \yii\web\Controller
     public function actionIndex(){
         //['!=','status',-1]
         //分页
-        $query = Article_Category::find();
+    /*    $query = Article_Category::find();
         $count = $query->all();
         $page = new Pagination([
             'totalCount'=>$count,
             'DefaultPageSize'
-        ]);
+        ]);*/
         $cates =Article_Category::find()->all();
         return $this->render('index',['cates'=>$cates]);
     }
@@ -72,4 +73,33 @@ class Article_categoryController extends \yii\web\Controller
         return $this->render('add',['model'=>$model]);
     }
 
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ],
+        ];
+    }
+    //*/过滤器,围墙,老板可以增删改查角色和权限,其他角色可以查看
+   /* public function behaviors()
+    {
+        return [
+            'acf'=>[
+                'class'=>AccessControl::className(),
+                'rules'=>[
+                    [//未认证的用户可以查看角色,查看权限
+                        'allow'=>true,//是否允许
+                        'actions'=>['index-permission','role-index','goods/index'],//指定操作
+                        'roles'=>['?'],//？表示未认证用户
+                    ],
+                    [//老板可以对权限角色增删改查
+                        'allow'=>true,//是否允许
+                        'actions'=>['add','delete','edit','index','rechange','removed'],//指定操作
+                        'roles'=>['老板','项目经理'],
+                    ],
+                ]
+            ],
+        ];
+    }*/
 }

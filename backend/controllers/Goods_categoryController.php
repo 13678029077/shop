@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 //商品分类
+use backend\components\RbacFilter;
 use backend\models\Goods_Category;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
@@ -92,6 +93,17 @@ class Goods_categoryController extends \yii\web\Controller
         }
         return $this->redirect(['goods_category/index']);//跳转页面
     }
+
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ],
+        ];
+    }
+
 
 
     //嵌套集合

@@ -1,6 +1,6 @@
 <?=\yii\bootstrap\Html::a('添加品牌',['brand/add'],['class'=>'btn btn-info btn-sm'])?><br/><br/>
-<?=\yii\bootstrap\Html::a('回收站',['brand/removed'],['class'=>'btn btn-info btn-sm btn-warning','style'=>'float:right'])?><br/><br/>
     <table class="table table-bordered table-hover table-striped">
+        <thead>
         <tr>
             <th>ID</th>
             <th>名称</th>
@@ -8,8 +8,15 @@
             <th>Logo</th>
             <th>排序号</th>
             <th>状态</th>
+            <?php  $user = \Yii::$app->user;
+
+
+
+            ?>
             <th>操作</th>
         </tr>
+        </thead>
+        <tbody>
         <?php  foreach ($brands as $brand): ?>
             <tr>
                 <td><?=$brand->id?></td>
@@ -24,11 +31,23 @@
                 </td>
             </tr>
         <?php endforeach;?>
+        </tbody>
     </table>
 
 <?php
-echo \yii\widgets\LinkPager::widget([
+/*echo \yii\widgets\LinkPager::widget([
         'pagination'=>$page,
         'nextPageLabel'=>'下一页',
         'prevPageLabel'=>'上一页',
-]);
+]);*/
+
+
+/**
+ * @var $this \yii\web\View
+ */
+$this->registerCssFile('//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css');
+$this->registerJsFile('http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js',['depends'=>\yii\web\JqueryAsset::className()]);
+$this->registerJs('$(".table").DataTable({});');
+
+
+

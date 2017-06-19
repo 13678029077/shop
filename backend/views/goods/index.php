@@ -6,26 +6,26 @@
 </style>
 <?=\yii\bootstrap\Html::a('添加商品',['goods/add'],['class'=>'btn btn-info btn-sm','style'=>'float:left;'])?><br/><br/><br/>
 <!--商品名收索-->
-<?=\yii\bootstrap\Html::a('商品回收站',['goods/removed'],['class'=>'btn btn-warning btn-sm','style'=>'float:right;'])?><br/><br/><br/>
-
+<!--
 <form action="index" method="get" class="form-inline">
      名称：<input type="search" name="name" placeholder="商品名称" class="form-control" >
      SN: <input type="search" name="sn" placeholder="SN" class="form-control" >
-     品牌：  <select name="brand" class="form-control" >
-                <option value="0"><----按品牌查找----></option>
-                <?php foreach($brands as $brand):?>
-                    <option value="<?=$brand->id?>">--<?=$brand->name?>--</option>
-                <? endforeach;?>
+     品牌：  <select name="brand" class="form-control" >-->
+               <!-- <option value="0"><----按品牌查找----></option>
+              <!--  <?php /*foreach($brands as $brand):*/?>
+                    <option value="<?/*=$brand->id*/?>">--<?/*=$brand->name*/?>--</option>
+                <?/* endforeach;*/?>
          </select>
      价格：<input type="search" name="min_price" id="min" class="form-control" placeholder="down"> —
          <input type="search" name="max_price" id="max"  class="form-control" placeholder="up" >
     <button type="submit" class="btn btn-info " id="search"">收索</button>
 </form><br/><br/>
-
+-->
 
 
 <!--商品列表展示-->
-<table class="table table-bordered table-hover table-striped">
+<table class="table table-hover table-border" id="sample-table">
+    <thead>
     <tr>
         <th>ID</th>
         <th>name</th>
@@ -40,8 +40,11 @@
         <th>状态</th>
         <th>排序号</th>
         <th>添加时间</th>
+
         <th>操作</th>
     </tr>
+    </thead>
+    <tbody>
     <?php  foreach($goods as $good){ ?>
         <tr>
             <td><?=$good->id?></td>
@@ -64,11 +67,23 @@
             </td>
         </tr>
     <?php };?>
+    </tbody>
 </table>
 <?php
-echo \yii\widgets\LinkPager::widget([
+/*echo \yii\widgets\LinkPager::widget([
     'pagination'=>$page,
     'nextPageLabel'=>'下一页',
     'prevPageLabel'=>'上一页',
 ]);
+*/?>
 
+
+<?php
+/**
+ * @var $this \yii\web\View
+ */
+$this->registerCssFile('//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css');
+$this->registerJsFile('http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js',['depends'=>\yii\web\JqueryAsset::className()]);
+$this->registerJs('$(".table").DataTable({});');
+
+?>

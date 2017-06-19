@@ -1,10 +1,13 @@
 <?php
 namespace backend\controllers;
 
+use backend\components\RbacFilter;
 use backend\models\Brand;
 use yii\data\Pagination;
 
 use xj\uploadify\UploadAction;
+use yii\grid\ActionColumn;
+
 class BrandController extends \yii\web\Controller
 {
     //添加品牌
@@ -138,6 +141,7 @@ class BrandController extends \yii\web\Controller
         ];
     }
 /*
+ * //七牛云
     public function actionTest(){
         $ak = '6GX6pflkyaH-jaOJya12fIEhZo6I0TGpl_TQ7wGj';
         $sk = 'qnW_O0gIMmma4PCuDbCOhucxYMoHdMRiN48ROog1';
@@ -152,5 +156,15 @@ class BrandController extends \yii\web\Controller
         $url = $qiniu->getLink($key);//得到文件地址
         var_dump($url);
     }*/
+
+        //过滤器
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ],
+        ];
+    }
 
 }

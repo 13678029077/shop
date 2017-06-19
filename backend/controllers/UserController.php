@@ -2,39 +2,50 @@
 
 namespace backend\controllers;
 
+use backend\assets\AppAsset;
 use backend\models\LoginForm;
 use backend\models\User;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Cookie;
 
 class UserController extends \yii\web\Controller
 {
+/*    //服务器测试数据
     public function actionInit(){
         $user = new User();
         $user->username = 'admin222';
         $password= '123456';
         $user->password_hash = \Yii::$app->security->generatePasswordHash($password);
         $user->email = '13423@123.123234';
-
         $user->save();
         return $this->redirect(['goods/index']);
-    }
+    }*/
 
     //用户注册
-    public function actionRegister(){
+    public function actionRegister()
+    {
         $model = new User(['scenario'=>User::SCENARIO_REG]);
         if($model->load(\Yii::$app->request->post()) && $model->validate()){
-            $model->created_at = time();
-            //密码加密
-            $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);
-            $model->save(false);
+            $model->created_at = time();//注册时间
+            $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);//密码加密
+            $model->save(false);//数据保存，然后根据ID关联角色
+            $id = $model->getOldAttribute('id');//获得刚刚保存用户的ID
+            $authmanage = \Yii::$app->authManager;
+            foreach ($model->roles as $role){//循环分配多个角色
+                $ro = $authmanage->getRole($role);//找到每个角色
+                $authmanage->assign($ro,$id);//将角色分配给当前ID的用户
+            }
             \Yii::$app->session->setFlash('success','注册成功,请登录');
             return $this->redirect(['user/login','username'=>$model->username]);
         }
         return $this->render('register',['model'=>$model]);
     }
 
-    //自动登录
+
+
+    //自动登录测试
     public function actionLogin1(){
         $model = new LoginForm();
         if($model->load(\Yii::$app->request->post()) && $model->validate()){
@@ -44,7 +55,7 @@ class UserController extends \yii\web\Controller
                 return $this->redirect(['user/index']);
             }
         }
-        return $this->render('login1',['model'=>$model]);
+        return $this->render('login',['model'=>$model]);
     }
 
 
@@ -100,7 +111,6 @@ class UserController extends \yii\web\Controller
     //用户列表
     public function actionIndex()
     {
-        //var_dump(\Yii::$app->user->identity);exit;
         $users = User::find()->all();
         $login_user = \Yii::$app->user->id;
         return $this->render('index',['users'=>$users,'login_user'=>$login_user]);
@@ -120,6 +130,8 @@ class UserController extends \yii\web\Controller
             \Yii::$app->session->setFlash('success','修改成功');
             return $this->redirect(['user/index']);
         }
+        //回显角色
+        $model->roles = ArrayHelper::map(\Yii::$app->authManager->getRolesByUser($id),'name','name');
         return $this->render('chgpwd',['model'=>$model]);
     }
 
@@ -137,7 +149,7 @@ class UserController extends \yii\web\Controller
     }
 
 
-    //过滤器
+    /*//过滤器,围墙
       public function behaviors()
       {
           return [
@@ -146,27 +158,24 @@ class UserController extends \yii\web\Controller
                   //'only'=>['register','login','index','delete','edit'],//该过滤器作用的操作 ，默认是所有操作
                   'rules'=>[
                       [//未认证用户允许执行的操作
-
                           'allow'=>true,//是否允许执行
-                          'actions'=>['register','login','captcha','login1','init'],//指定操作
+                          'actions'=>['login','captcha','init'],//指定操作
                           'roles'=>['?'],//角色？表示未认证用户
                       ],
                       [//已认证用户允许执行的操作
                           'allow'=>true,//是否允许执行
                           'actions'=>['login1','index','register','init','delete','edit','login','captcha','logout'],//指定操作
-                          'roles'=>['@'],//角色 @表示已认证用户
-                        /*  'matchCallback'=>function(){
-                              //return date('j')==6;
-                              //return date('s')%3;
-                              return false;
-                          },*/
+                          'roles'=>['老板'],//角色 @表示已认证用户
+                      ],
+                      [//已认证用户允许执行的操作
+                          'allow'=>true,//是否允许执行
+                          'actions'=>['login1','index','register','init','delete','login','captcha','logout'],//指定操作
+                          'roles'=>['项目经理'],//角色 @表示已认证用户
                       ],
                       //其他都禁止执行
                   ]
               ],
           ];
-      }
-
-
+      }*/
 
 }

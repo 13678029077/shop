@@ -1,3 +1,5 @@
+
+
 <?=\yii\bootstrap\Html::a('添加商品分类',['goods_category/add'],['class'=>'btn btn-info btn-sm'])?><br/><br/>
     <table class="table table-bordered table-hover table-striped">
         <tr>

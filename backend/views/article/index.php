@@ -1,5 +1,6 @@
 <?=\yii\bootstrap\Html::a('添加文章',['article/add'],['class'=>'btn btn-info btn-sm','style'=>'float:left;'])?><br/><br/><br/>
     <table class="table table-bordered table-hover table-striped">
+        <thead>
         <tr>
             <th>ID</th>
             <th>文章标题</th>
@@ -10,6 +11,8 @@
             <th>添加时间</th>
             <th>操作</th>
         </tr>
+        </thead>
+    <tbody>
         <?php  foreach ($articles as $article): ?>
             <tr>
                 <td><?=$article->id?></td>
@@ -26,6 +29,7 @@
                 </td>
             </tr>
         <?php endforeach;?>
+    </tbody>
     </table>
 <?php
 /*echo \yii\widgets\LinkPager::widget([
@@ -33,3 +37,13 @@
     'nextPageLabel'=>'下一页',
     'prevPageLabel'=>'上一页',
 ]);*/
+
+
+/**
+ * @var $this \yii\web\View
+ */
+$this->registerCssFile('//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css');
+$this->registerJsFile('http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js',['depends'=>\yii\web\JqueryAsset::className()]);
+$this->registerJs('$(".table").DataTable({});');
+
+?>

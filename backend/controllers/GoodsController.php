@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\components\RbacFilter;
 use backend\models\Brand;
 use backend\models\Goods;
 use backend\models\Goods_Category;
@@ -9,6 +10,7 @@ use backend\models\Goods_picture;
 use backend\models\Goods_pictures;
 use backend\models\GoodsIntro;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Request;
 use yii\web\UploadedFile;
@@ -19,7 +21,7 @@ class GoodsController extends \yii\web\Controller
     //商品列表页
     public function actionIndex()
     {
-        //模糊查询
+      /*  //模糊查询
         $query = Goods::find();
         if($name = \Yii::$app->request->get('name')){//按那么查询
             $query->andWhere(['like','name',$name]);
@@ -43,12 +45,13 @@ class GoodsController extends \yii\web\Controller
             'totalCount'=>$count,
             'defaultPageSize'=>3,// 每页显示3条
         ]);
-        $goods  = $query->offset($page->offset)->limit($page->limit)->all();
+        $goods  = $query->offset($page->offset)->limit($page->limit)->all();*/
+      $goods = Goods::find()->all();
         $model = new Goods();
         //收索下拉商品品牌,商品分类
         $brands = Brand::find()->all();
         $cates = Goods_Category::find()->all();
-        return $this->render('index',['goods'=>$goods,'model'=>$model,'page'=>$page,'brands'=>$brands,'cates'=>$cates]);
+        return $this->render('index',['goods'=>$goods,'model'=>$model,'brands'=>$brands,'cates'=>$cates]);
     }
 
 
@@ -296,5 +299,37 @@ class GoodsController extends \yii\web\Controller
 
         ];
     }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+            ],
+        ];
+    }
+
+    /* //过滤器,围墙,老板，项目经理可以增删改查商品，未认证可以查看
+     public function behaviors()
+     {
+         return [
+             'acf'=>[
+                 'class'=>AccessControl::className(),
+                 'rules'=>[
+                     [//未认证的用户可以查看
+                         'allow'=>true,//是否允许
+                         'actions'=>['index','pic_index','content','removed'],//指定操作
+                         'roles'=>['?'],//？表示未认证用户
+                     ],
+                     [//老板,项目经理可以对商品增删改查
+                         'allow'=>true,//是否允许
+                         'actions'=>['readd','content','pic_add','pic_index','add','index','delete','removed','pic_readd','pic_removed','pic_delete'],//指定操作
+                         'roles'=>['老板','项目经理'],
+                     ],
+                 ]
+             ],
+         ];
+     }*/
+
 
 }
