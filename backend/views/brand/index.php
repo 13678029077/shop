@@ -8,11 +8,6 @@
             <th>Logo</th>
             <th>排序号</th>
             <th>状态</th>
-            <?php  $user = \Yii::$app->user;
-
-
-
-            ?>
             <th>操作</th>
         </tr>
         </thead>
@@ -26,8 +21,9 @@
                 <td><?=$brand->sort?></td>
                 <td><?=\backend\models\Brand::$status[$brand->status]?></td>
                 <td>
-                    <?=\yii\bootstrap\Html::a('',['brand/edit','id'=>$brand->id],['class'=>'glyphicon glyphicon-pencil btn btn-primary btn-xs'])?>&nbsp&nbsp
-                    <?=\yii\bootstrap\Html::a('',['brand/delete','id'=>$brand->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>
+                    <?php if (Yii::$app->user->can('brand/edit')) echo \yii\bootstrap\Html::a('',['brand/edit','id'=>$brand->id],['class'=>'glyphicon glyphicon-pencil btn btn-info btn-xs'])?>
+                    <?php if (Yii::$app->user->can('brand/delete')) echo \yii\bootstrap\Html::a('',['brand/delete','id'=>$brand->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>
+
                 </td>
             </tr>
         <?php endforeach;?>

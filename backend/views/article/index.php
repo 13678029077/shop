@@ -23,9 +23,8 @@
                 <td><?=\backend\models\Article_Category::$status[$article->status]?></td>
                 <td><?=date('Y-m-d h:s',$article->create_time)?></td>
                 <td>
-                    <?=\yii\bootstrap\Html::a('',['article/edit','id'=>$article->id],['class'=>'glyphicon glyphicon-pencil btn btn-primary btn-xs'])?>&nbsp&nbsp
-                    <?=\yii\bootstrap\Html::a('',['article/delete','id'=>$article->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>
-
+                    <?php if (Yii::$app->user->can('article/edit')) echo \yii\bootstrap\Html::a('',['article/edit','id'=>$article->id],['class'=>'glyphicon glyphicon-pencil btn btn-info btn-xs'])?>
+                    <?php if (Yii::$app->user->can('article/delete')) echo \yii\bootstrap\Html::a('',['article/delete','id'=>$article->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>
                 </td>
             </tr>
         <?php endforeach;?>

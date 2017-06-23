@@ -76,7 +76,7 @@ class ArticleController extends \yii\web\Controller
                 $model2->id = $model->oldAttributes['id'];
                 $model2->save();
                 //添加成功跳转
-                \Yii::$app->session->setFlash('success','文章分类添加成功');
+                \Yii::$app->session->setFlash('success','文章修改成功');
                 return $this->redirect(['article/index']);//跳转页面
             }
         }

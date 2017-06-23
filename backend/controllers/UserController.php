@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Cookie;
+use yii\web\HttpException;
 
 class UserController extends \yii\web\Controller
 {
@@ -62,36 +63,46 @@ class UserController extends \yii\web\Controller
 
 
 
-    //用户登录
+    //管理员登录
     public function actionLogin(){
         $model = new User(['scenario'=>User::SCENARIO_LOGIN]);
             if($model->load(\Yii::$app->request->post()) && $model->validate()){
                 //查出用户
                 $user = User::findOne(['username'=>$model->username]);
                 if($user){
-                    //比对密码
-                    if(\Yii::$app->security->validatePassword($model->password_m,$user->password_hash)){
-                        //登录,自动登录
-                        //var_dump($model->rememberme);exit;
-                        if($model->rememberme){
-                            //先生成auth_key
-                            $user->auth_key = \Yii::$app->security->generateRandomString() ;
-                            \Yii::$app->user->login($user,3600*7*24);
-                        }else{
-                            \Yii::$app->user->login($user);
-                        }
-                        //登录设置时间，是否自动登录
-                        \Yii::$app->user->login($user,$model->rememberme ? 3600*24*7 : 0);
+                    //var_dump($user->status);exit;
+                    //检查用户状态,状态为1 可以登录
+                    if(!$user->status){
 
-                        $user->last_login_time = time();//最后登录时间
-                        $user->last_login_ip = $_SERVER['REMOTE_ADDR'];//最后登录Ip
-                        $user->save(false);
+                        echo  '<script>confirm("该用户已禁用");</script>';
+                        return false;
 
-                        echo  '<script>alert("登录成功");</script>';
-                        return $this->redirect(['user/index','login_user'=>$user->username]);
                     }else{
-                        echo  '<script>alert("用户名或密码错误");</script>';
+                        //比对密码
+                        if(\Yii::$app->security->validatePassword($model->password_m,$user->password_hash)){
+                            //登录,自动登录
+                            //var_dump($model->rememberme);exit;
+                            if($model->rememberme){
+                                //先生成auth_key
+                                $user->auth_key = \Yii::$app->security->generateRandomString() ;
+                                \Yii::$app->user->login($user,3600*7*24);
+                            }else{
+                                \Yii::$app->user->login($user);
+                            }
+                            //登录设置时间，是否自动登录
+                            \Yii::$app->user->login($user,$model->rememberme ? 3600*24*7 : 0);
+
+                            $user->last_login_time = time();//最后登录时间
+                            $user->last_login_ip = $_SERVER['REMOTE_ADDR'];//最后登录Ip
+                            $user->save(false);
+
+                            echo  '<script>alert("登录成功");</script>';
+                            return $this->redirect(['user/index','login_user'=>$user->username]);
+                        }else{
+                            echo  '<script>alert("用户名或密码错误");</script>';
+                        }
                     }
+
                 }else{
                     echo  '<script>alert("用户名或密码错误");</script>';
                 }
@@ -100,7 +111,7 @@ class UserController extends \yii\web\Controller
     }
 
 
-    //用户注销
+    //管理员注销
     public function actionLogout(){
         \Yii::$app->user->logout();
         //\Yii::$app->user->
@@ -108,7 +119,7 @@ class UserController extends \yii\web\Controller
         return $this->redirect(['user/login','model'=>$model]);
     }
 
-    //用户列表
+    //管理员列表
     public function actionIndex()
     {
         $users = User::find()->all();
@@ -116,13 +127,18 @@ class UserController extends \yii\web\Controller
         return $this->render('index',['users'=>$users,'login_user'=>$login_user]);
     }
 
-    //删除
+    //管理员删除
     public function actionDelete($id){
-        $user = User::findOne(['id'=>$id])->delete();
+        $user = User::findOne(['id'=>$id]);
+        //($user);exit;
+        $user->status = 0 ;
+
+        $user->save(false);
+        \Yii::$app->session->setFlash('删除成功');
         return $this->redirect('index');
     }
 
-    //修改
+    //管理员修改
     public function actionEdit($id){
         $model = User::findOne(['id'=>$id]);
         $model->scenario=User::SCENARIO_EDIT;

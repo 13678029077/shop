@@ -38,20 +38,20 @@ class GoodsController extends \yii\web\Controller
        if($max = \Yii::$app->request->get('max_price')){//按最大价格查询
             $query->andWhere(['<=','shop_price',$max]);
         }
-
+*/ $query = Goods::find();
         //分页,按条件询查所有商品
         $count = $query->count();
         $page=new Pagination([
             'totalCount'=>$count,
             'defaultPageSize'=>3,// 每页显示3条
         ]);
-        $goods  = $query->offset($page->offset)->limit($page->limit)->all();*/
+        $goods  = $query->offset($page->offset)->limit($page->limit)->all();
       $goods = Goods::find()->all();
         $model = new Goods();
         //收索下拉商品品牌,商品分类
         $brands = Brand::find()->all();
         $cates = Goods_Category::find()->all();
-        return $this->render('index',['goods'=>$goods,'model'=>$model,'brands'=>$brands,'cates'=>$cates]);
+        return $this->render('index',['goods'=>$goods,'model'=>$model,'brands'=>$brands,'cates'=>$cates,'page'=>$page]);
     }
 
 
@@ -147,7 +147,7 @@ class GoodsController extends \yii\web\Controller
             $model2->goods_id=$model->getAttribute('id');
             $model2->save(); //保存文章内容
             //添加成功，跳转页面
-            \Yii::$app->session->setFlash('success','商品添加成功');
+            \Yii::$app->session->setFlash('success','修改成功');
             return $this->redirect(['goods/index']);
         }
         //视图页面，需要显示品牌分类下拉数据
@@ -162,25 +162,6 @@ class GoodsController extends \yii\web\Controller
         return $this->render('add',['model'=>$model,'model2'=>$model2,'goods_category'=>$goods_category,'brands'=>$brands]);
     }
 
-
-    //4.回收站显示
-    public function actionRemoved(){
-        //询查所有商品
-        $goods = Goods::find()->where(['status'=>0])->all();
-        $model = new Goods();
-        return $this->render('removed',['goods'=>$goods,'model'=>$model]);
-    }
-
-    //5.商品还原
-    public function actionReadd($id){
-        $goods = Goods::findOne(['id'=>$id]);//找到还原行
-        $goods->status = 1;//修改状态
-        $goods->is_on_sale = 1;//是否在售改为0
-        $goods->save();
-        \Yii::$app->session->setFlash('还原成功');
-        //echo "<script>alert('删除成功');</script>";
-        return $this->redirect(['goods/removed']);
-    }
 
     //查看商品详情
     public function actionContent($id){
@@ -219,6 +200,15 @@ class GoodsController extends \yii\web\Controller
         $goods_pic->status = 0;
         $goods_pic->save();
         return $this->redirect(['pic_index','id'=>$goods_id]);
+    }
+
+    public function actionPic_delete1(){
+        $goods_pic = Goods_pictures::find()->where(['status'=>0])->all();
+        foreach ($goods_pic as $n){
+            $n->delete();
+            //unlink(\Yii::getAlias('@web').$n->img);
+        }
+        return $this->redirect(['pic_index']);
     }
 
     //图片回收站页面

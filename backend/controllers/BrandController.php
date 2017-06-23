@@ -36,14 +36,14 @@ class BrandController extends \yii\web\Controller
     public function actionIndex(){
         //分页
         $query = Brand::find();
-        $total = $query->count();//总条数
+       /* $total = $query->count();//总条数
         $page=new Pagination([
             'totalCount'=>$total,
             'defaultPageSize'=>3,// 每页显示3条
-        ]);
+        ]);*/
         //查询数据
-        $brands  = $query->offset($page->offset)->limit($page->limit)->all();
-        return $this->render('index',['brands'=>$brands,'page'=>$page]);
+        $brands  = $query->all();
+        return $this->render('index',['brands'=>$brands]);
     }
 
 
@@ -129,6 +129,7 @@ class BrandController extends \yii\web\Controller
                 'afterValidate' => function (UploadAction $action) {},
                 'beforeSave' => function (UploadAction $action) {},
                 'afterSave' => function (UploadAction $action) {
+
                     $imgurl = $action->getWebUrl();
                     //调用七牛云，将文件上传到七牛云
                     $qiniu = \Yii::$app->qiniu;//七牛对象

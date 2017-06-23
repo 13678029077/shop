@@ -161,7 +161,7 @@ class User extends ActiveRecord implements IdentityInterface
         {
             if($insert){
                 $this->created_at = time();//保存注册时间
-                $this->status = 1;
+               // $this->status = 1;
                 //生成随机字符串auth_key
                 $this->auth_key = Yii::$app->security->generateRandomString();
             }

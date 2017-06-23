@@ -38,8 +38,9 @@
                 ?>
             </td>
             <td>
-                <?=\yii\bootstrap\Html::a('',['user/edit','id'=>$user->id],['class'=>'glyphicon glyphicon-pencil '])?>&nbsp&nbsp
-                <?=\yii\bootstrap\Html::a('',['user/delete','id'=>$user->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>&nbsp&nbsp
+                <?php if (Yii::$app->user->can('user/edit')) echo \yii\bootstrap\Html::a('',['user/edit','id'=>$user->id],['class'=>'glyphicon glyphicon-pencil btn btn-warning btn-xs'])?>
+                <?php if (Yii::$app->user->can('user/delete')) echo \yii\bootstrap\Html::a('',['user/delete','id'=>$user->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>
+
             </td>
         </tr>
     </tbody>

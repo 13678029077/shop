@@ -12,7 +12,6 @@
 </div>
 
 <?=\yii\bootstrap\Html::a('上传商品图片',['goods/pic_add','id'=>$good->id],['class'=>'btn btn-info btn-sm','style'=>'float:right'])?><br/><br/>
-<?=\yii\bootstrap\Html::a('回收站',['goods/pic_removed','id'=>$good->id],['class'=>'btn btn-info btn-sm btn-warning','style'=>'float:right;border:1px solid red'])?><br/><br/>
 
 <div class="pic_box">
     <ul>

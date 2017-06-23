@@ -14,8 +14,8 @@
                     <span class="toggle_cate glyphicon glyphicon-chevron-down" style="float:right"></span>
                 </td>
                 <td>
-                    <?=\yii\bootstrap\Html::a('',['goods_category/edit','id'=>$v['id']],['class'=>'glyphicon glyphicon-pencil '])?>&nbsp&nbsp
-                    <?=\yii\bootstrap\Html::a('',['goods_category/delete','id'=>$v['id']],['class'=>'glyphicon glyphicon-trash btn btn-warning btn-xs'])?>
+                    <?php if (Yii::$app->user->can('goods_category/edit')) echo \yii\bootstrap\Html::a('',['goods_category/edit','id'=>$v['id']],['class'=>'glyphicon glyphicon-pencil btn btn-warning btn-xs'])?>
+                    <?php if (Yii::$app->user->can('goods_category/delete')) echo \yii\bootstrap\Html::a('',['goods_category/delete','id'=>$v['id']],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs '])?>
                 </td>
             </tr>
         <?php endforeach;?>

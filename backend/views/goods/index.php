@@ -61,21 +61,21 @@
             <td><?=$good->sort?></td>
             <td><?=date('Y-m-d',$good->create_time)?></td>
             <td>
-                <?=\yii\bootstrap\Html::a('',['goods/edit','id'=>$good->id],['class'=>'glyphicon glyphicon-pencil '])?>&nbsp&nbsp
-                <?=\yii\bootstrap\Html::a('',['goods/delete','id'=>$good->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>&nbsp&nbsp
-                <?=\yii\bootstrap\Html::a('相册',['goods/pic_index','id'=>$good->id],['class'=>' btn btn-info btn-xs'])?>
+                <?php if (Yii::$app->user->can('goods/edit')) echo \yii\bootstrap\Html::a('',['goods/edit','id'=>$good->id],['class'=>'glyphicon glyphicon-pencil btn btn-info btn-xs'])?>
+                <?php if (Yii::$app->user->can('goods/delete')) echo \yii\bootstrap\Html::a('',['goods/delete','id'=>$good->id],['class'=>'glyphicon glyphicon-trash btn btn-danger btn-xs'])?>
+                <?php if (Yii::$app->user->can('goods/pic_index')) echo \yii\bootstrap\Html::a('相册',['goods/pic_index','id'=>$good->id],['class'=>'btn btn-info btn-xs'])?>
             </td>
         </tr>
     <?php };?>
     </tbody>
 </table>
 <?php
-/*echo \yii\widgets\LinkPager::widget([
+echo \yii\widgets\LinkPager::widget([
     'pagination'=>$page,
     'nextPageLabel'=>'下一页',
     'prevPageLabel'=>'上一页',
 ]);
-*/?>
+?>
 
 
 <?php
