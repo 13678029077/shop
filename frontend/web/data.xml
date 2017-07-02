@@ -1,0 +1,19 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<!-- 这是xml的注释 -->
+<students>
+	<student sn='0001'>
+		<name>关羽</name>
+		<age>28</age>
+		<sex>男</sex>		
+	</student>
+	<student sn='0002'>
+		<name>张飞</name>
+		<age>27</age>
+		<sex>男</sex>
+	</student>
+	<student sn='0003'>
+		<name>小乔</name>
+		<age>18</age>
+		<sex>女</sex>
+	</student>
+</students>

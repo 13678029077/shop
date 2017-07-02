@@ -60,7 +60,13 @@ use yii\helpers\Html;
                 ?>
 <!--                <li>您好，欢迎来到京西！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
 -->                <li class="line">|</li>
-                <li><a href="http://www.shop.com/goods/order.html">我的订单</a></li>
+                <li><?php if(Yii::$app->user->isGuest){
+                        echo '<a href="http://www.shop.com/user/login.html">我的订单</a>';
+                    }else{
+                        echo '<a href="http://www.shop.com/goods/order.html">我的订单</a>';
+                    }
+                    ?>
+                    </li>
                 <li class="line">|</li>
                 <li>客户服务</li>
 
@@ -81,8 +87,8 @@ use yii\helpers\Html;
         <div class="search fl">
             <div class="search_form">
                 <div class="form_left fl"></div>
-                <form action="" name="serarch" method="get" class="fl">
-                    <input type="text" class="txt" value="请输入商品关键字" /><input type="submit" class="btn" value="搜索" />
+                <form action="search.html" name="serarch" method="get" class="fl">
+                    <input type="text" name="keywords" class="txt" value="请输入商品关键字" /><input type="submit" class="btn" value="搜索" />
                 </form>
                 <div class="form_right fl"></div>
             </div>
@@ -149,7 +155,12 @@ use yii\helpers\Html;
         <div class="cart fl">
             <dl>
                 <dt>
-                    <a href="">去购物车结算</a>
+                    <a href="<?php if(!Yii::$app->user->isGuest){
+                        echo 'http://www.shop.com/goods/cart1.html';
+                    }else{
+                        echo 'http://www.shop.com/user/login.html';
+                    }
+                    ?>">去购物车结算</a>
                     <b></b>
                 </dt>
                 <dd>
@@ -173,26 +184,7 @@ use yii\helpers\Html;
 
             <div class="cat_bd none" >
                 <!--我的分类-->
-                <!--一级分类--->
-                <?php foreach (\frontend\models\Goods_Category::find()->asArray()->where(['parent_id'=>0])->all() as $k=>$item1){?>
-                    <div class="cat <?=$k==0?' item1"':'';?>" >
-                        <h3><a href="list.html?cate=<?=$item1['id']?>"><?=$item1['name']?></a> <b></b></h3>
-                        <div class="cat_detail">
-                            <!--二级分类-->
-                            <?php foreach (\frontend\models\Goods_Category::find()->asArray()->where(['parent_id'=>$item1['id']])->all() as $n=>$item2){?>
-                                <dl <?=$k==0?'class="dl_1st"':'';?>>
-                                    <dt><a href="list.html?cate=<?=$item2['id']?>"><?=$item2['name']?></a></dt>
-                                    <dd>
-                                        <!--三级分类-->
-                                        <?php foreach (\frontend\models\Goods_Category::find()->asArray()->where(['parent_id'=>$item2['id']])->all() as $m=>$item3){?>
-                                            <a href="list.html?cate=<?=$item3['id']?>"><?=$item3['name']?></a>
-                                        <? } ?>
-                                    </dd>
-                                </dl>
-                            <?php } ?>
-                        </div>
-                    </div>
-                <?php } ?>
+                <?=\frontend\widgets\CategoryWidgets::widget()?>
             </div>
         </div>
                 <!--  商品分类部分 end-->

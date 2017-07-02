@@ -12,7 +12,6 @@ class MenuController extends \yii\web\Controller {
         //接受数据，完成添加
         if($model->load(\Yii::$app->request->post()) && $model->validate()){
             //1.根据url找到权限的描述名字
-
             $model->label = \Yii::$app->authManager->getPermission($model->url)->description;
             //2,判断是否为一级菜单
             if($model->parent_id == 0){

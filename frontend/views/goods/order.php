@@ -43,9 +43,9 @@
             <h3>我的订单</h3>
             <dl>
                 <dt>便利提醒：</dt>
-                <dd>待付款（0）</dd>
-                <dd>待确认收货（0）</dd>
-                <dd>待自提（0）</dd>
+                <dd>待付款   （<span <?=$status['ready']>0? 'style="color:red"' : '' ;?>><?=$status['ready']?></span>）</dd>
+                <dd>待确认收货（<span <?=$status['confirm']>0? 'style="color:red"' : '' ;?>><?=$status['confirm']?></span>）</dd>
+                <dd>待自提   （<span <?=$status['ziti']>0? 'style="color:red"' : '' ;?>><?=$status['ziti']?></span>）</dd>
             </dl>
 
             <dl>
@@ -69,33 +69,19 @@
                 </tr>
                 </thead>
                 <tbody>
+                <?php foreach ($goods as $good):?>
                 <tr>
-                    <td><a href="">852592106</a></td>
-                    <td><a href=""><?=\yii\helpers\Html::img(Yii::getAlias('@web/images/order1.jpg'))?></a></td>
-                    <td>王超平</td>
-                    <td>￥35.00 货到付款</td>
-                    <td>2013-11-12 16:28:14</td>
-                    <td>已取消</td>
+                    <td><a href=""> <?=$good['trade_no']?></a></td>
+                  <td><a href=""><?=\yii\helpers\Html::img(Yii::getAlias('http://admin.shop.com'.$good['logo']))?></a></td>
+                    <td><?=$good['name']?></td>
+                    <td>￥<?=number_format($good['price'],2,'.','')?> <?=$good['payment_name']?></td>
+                    <td><?=date('Y-m-d h:i:s',$good['create_time'])?></td>
+                    <td class="status"><?=\frontend\models\Order::$status[$good['status']]?></td>
+                    <!--（0已取消1待付款2待发货3待收货4完成）-->
                     <td><a href="">查看</a> | <a href="">删除</a></td>
                 </tr>
-                <tr>
-                    <td><a href="">852571653</a></td>
-                    <td><a href=""><?=\yii\helpers\Html::img(Yii::getAlias('@web/images/order2.jpg'))?></a></td>
-                    <td>王超平</td>
-                    <td>￥35.00 在线支付</td>
-                    <td>2013-11-13 19:28:14</td>
-                    <td>已完成</td>
-                    <td><a href="">查看</a> | <a href="">删除</a></td>
-                </tr>
-                <tr>
-                    <td><a href="">471196680</a></td>
-                    <td><a href=""><?=\yii\helpers\Html::img(Yii::getAlias('@web/images/order3.jpg'))?></a></td>
-                    <td>王超平</td>
-                    <td>￥169.00 货到付款</td>
-                    <td>2013-02-20 23:00:00</td>
-                    <td>已完成</td>
-                    <td><a href="">查看</a> | <a href="">删除</a></td>
-                </tr>
+                <?php endforeach;?>
+
                 </tbody>
             </table>
         </div>
@@ -105,3 +91,19 @@
 <!-- 页面主体 end-->
 
 <div style="clear:both;"></div>
+
+<!-- 分页信息 start -->
+<div class="page mt20">
+           <span>
+               <a href="order.html?page=<?=$page['page']<=1?1:$page['page']-1?>">上一页</a>
+
+               <?php for($i=1;$i<=$page['yema'];$i++){?>
+                        <a  href="order.html?page=<?=$i?>"><?=$i?></a>
+                   <!--class ="cur"-->
+               <?php }?>
+
+				<a href="order.html?page=<?=$page['page']>=$page['total']?$page['total']:$page['page']+1?>">下一页</a>
+           </span>
+</div>
+<!-- 分页信息 end -->
+

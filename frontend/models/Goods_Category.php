@@ -55,7 +55,9 @@ class Goods_Category extends \yii\db\ActiveRecord
         ];
     }
 
-
+    public function getChildren(){
+        return $this->hasMany(self::className(),['parent_id'=>'id']);
+    }
 
 
 }

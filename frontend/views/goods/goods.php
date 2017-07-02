@@ -5,7 +5,7 @@
 <div class="main w1210 mt10 bc">
     <!-- 面包屑导航 start -->
     <div class="breadcrumb">
-        <h2>当前位置：<a href="index.html">首页</a> > <a href=""><?=$goods_info->cate->name?></a> > <?=$goods_info['name']?></h2>
+        <h2>当前位置：<a href="index.html">首页</a> > <a href="list.html?cate=<?=$goods_info->cate->id?>"><?=$goods_info->cate->name?></a> > <?=$goods_info['name']?></h2>
     </div>
     <!-- 面包屑导航 end -->
 
@@ -155,7 +155,7 @@
                     <li><span>上架时间：</span><?=date('Y-m-d',$goods_info['create_time'])?></li>
                     <li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
                 </ul>
-                <form action="" method="post" class="choose">
+                <form action="<?=\yii\helpers\Url::to(['goods/cart_add'])?>" method="post" class="choose">
                     <ul>
 
                         <li>
@@ -168,28 +168,13 @@
                                 </dd>
                             </dl>
                         </li>
-
-                  <!--  <script type="text/javascript">
-                        $('#add_num').on('click',function(){
-                            var old_amount = $('.amount').val();
-                            var new_amount = parseInt(old_amount)+1;
-                            $('.amount').val(new_amount);
-                        });
-                        $('#reduce_num').on('click',function(){
-                            var old_amount = $('.amount').val();
-                            var new_amount = parseInt(old_amount)-1;
-                            if(new_amount<=1){new_amount=1}
-                            $('.amount').val(new_amount);
-                        });
-                        //图片轮播效果
-
-                    </script>
--->
                         <li>
                             <dl>
                                 <dt>&nbsp;</dt>
                                 <dd>
                                     <input type="submit" value="" class="add_btn" />
+                                    <input type="hidden" name="goods_id" value="<?=$goods_info['id']?>">
+                                    <input type="hidden" name="_csrf-frontend" id="_csrf-frontend" value="<?=Yii::$app->request->csrfToken?>">
                                 </dd>
                             </dl>
                         </li>

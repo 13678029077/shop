@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use frontend\models\Member;
+use yii\filters\AccessControl;
 
 header('content:text/html; charset=utf-8');
 class UserController extends \yii\web\Controller
@@ -30,11 +31,12 @@ class UserController extends \yii\web\Controller
         if($model->load(\Yii::$app->request->post()) && $model->validate()){
             if($model->login()){//验证登录 信息并登录
                 \Yii::$app->session->setFlash('success','登录成功');
-                return $this->redirect(['goods/index']);
+                return $this->redirect(['goods/order']);
             }
         }
         return $this->render('login',['model'=>$model]);
     }
+
 
     //用户注销
     public function actionLogout(){
@@ -68,6 +70,22 @@ class UserController extends \yii\web\Controller
         return $this->render('user');
     }
 
+    //发送邮件
+    public function actionSendEmail(){
+      /*  Yii::$app->mailer->compose([//可以指定text。html
+            'html' => 'contact-html',
+            'text' => 'contact-text',
+        ]);
+        */
+        $result = \Yii::$app->mailer->compose()//此处可以传递视图文件
+            ->setFrom('463873431@qq.com')//由谁发出的邮件
+            ->setTo('463873431@qq.com')//发给谁
+            ->setSubject('Message subject')//邮件主题
+            ->setTextBody('哈哈')//邮件text内容
+            ->setHtmlBody('<em>我的邮件来了，请不要回复</em>')//邮件html内容
+            ->send();
+        var_dump($result);
+    }
 
 
     //验证码
@@ -81,5 +99,29 @@ class UserController extends \yii\web\Controller
             ],
         ];
     }
+
+
+
+    public function behaviors()
+    {
+        return [
+            'acf'=>[
+                'class'=>AccessControl::className(),
+                'rules'=>[
+                    [
+                        'allow'=>true,//是否允许
+                        'actions'=>['login','register','captcha','send-msg'],//指定操作
+                        'roles'=>['?'],//？表示未认证用户
+                    ],
+                    [
+                        'allow'=>true,//是否允许
+                        'actions'=>['login','register','captcha','logout','send-email','send-msg','user'],//指定操作
+                        'roles'=>['@'],
+                    ],
+                ]
+            ],
+        ];
+    }
+
 
 }

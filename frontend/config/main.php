@@ -19,6 +19,7 @@ return [
         ],*/
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'enableCsrfValidation' => false,
         ],
         'user' => [
             'loginUrl' => ['user/login'],//默认跳转页
@@ -57,6 +58,13 @@ return [
                 'app_secret'=>'165b1ebca5b0a9f0418df038b65874e5',
                 'sign_name'=>'jw的小网站',
                 'temple_code'=>'SMS_71660179',
+        ],
+        //redis
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
         ],
 
     ],

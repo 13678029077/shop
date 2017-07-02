@@ -4,9 +4,12 @@
 <div class="list w1210 bc mt10">
     <!-- 面包屑导航 start -->
     <div class="breadcrumb">
-        <h2>当前位置：<a href="index.html">首页</a> > <a href="list.html?cate=<?=$cate?>">
-                <?=\frontend\models\Goods_Category::findOne(['id'=>$cate])->name?>
+        <h2>当前位置：<a href="index.html">搜索</a>  <a href="">
+                <?php
+                    echo  !empty($keywords)? ' > '.$keywords : '';
+                ?>
             </a>
+
         </h2>
     </div>
     <!-- 面包屑导航 end -->
@@ -15,7 +18,7 @@
     <div class="list_left fl mt10">
         <!-- 分类列表 start -->
         <div class="catlist">
-            <h2><?=\frontend\models\Goods_Category::findOne(['id'=>$cate])->name?></h2>
+            <h2><?=1?></h2>
             <div class="catlist_wrap">
                 <div class="child">
                     <h3 class="on"><b></b>电脑整机</h3>
@@ -281,7 +284,7 @@
                     foreach ($goods as $good){
                         echo '<li>';
                         echo     '<dl>';
-                        echo           '<dt><a href="goods.html?cate='.$cate.'&id='.$good['id'].'">';
+                        echo           '<dt><a href="goods.html?id='.$good['id'].'">';
                                         /*输出商品图片*/
                         echo                \yii\helpers\Html::img('http://admin.shop.com/'.$good['logo']);
                         echo                '</a></dt>';

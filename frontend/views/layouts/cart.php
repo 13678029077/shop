@@ -1,23 +1,24 @@
 <?php
-//login布局
+
 /* @var $this \yii\web\View */
 /* @var $content string */
 
 use yii\helpers\Html;
 
-\frontend\assets\LoginAsset::register($this);
+\frontend\assets\GoodsAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-
 <body>
+<?php $this->beginBody() ?>
 <!-- 顶部导航 start -->
 <div class="topnav">
     <div class="topnav_bd w990 bc">
@@ -26,7 +27,15 @@ use yii\helpers\Html;
         </div>
         <div class="topnav_right fr">
             <ul>
-                <li>您好，欢迎来到京西！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
+                <?php
+                if(Yii::$app->user->isGuest){
+                    echo ' <li>您好，欢迎来到京西！[<a href="http://www.shop.com/user/login.html">登录</a>] [<a href="http://www.shop.com/user/register.html">免费注册</a>] </li>';
+                }else{
+                    echo ' <li>您好，欢迎来到京西！';
+                    echo Yii::$app->user->identity->username;
+                    echo ' || [<a href="http://www.shop.com/user/logout.html"> 注销 </a> ] </li>';
+                }
+                ?>
                 <li class="line">|</li>
                 <li><?php if(Yii::$app->user->isGuest){
                         echo '<a href="http://www.shop.com/user/login.html">我的订单</a>';
@@ -35,25 +44,33 @@ use yii\helpers\Html;
                     }
                     ?></li>
                 <li class="line">|</li>
-                <li>客户服务</li>
+                <li><a href="index.html">客户服务</a></li>
 
             </ul>
         </div>
     </div>
 </div>
 <!-- 顶部导航 end -->
-
+<div style="clear:both;"></div>
 <!-- 页面头部 start -->
 <div class="header w990 bc mt15">
     <div class="logo w990">
-        <h2 class="fl"><a href="index.html"><?=Html::img('@web/images/logo.png')?></a></h2>
+        <h2 class="fl"><a href="index.html"><?=\yii\helpers\Html::img('@web/images/logo.png')?></a></h2>
+        <div class="flow fr">
+            <ul>
+                <li class="cur">1.我的购物车</li>
+                <li >2.填写核对订单信息</li>
+                <li>3.成功提交订单</li>
+            </ul>
+        </div>
     </div>
 </div>
 <!-- 页面头部 end -->
 
+<div style="clear:both;"></div>
 
 
-<!-- 用户登录、注册主体 -->
+<!--内容详情-->
 <?=$content?>
 
 
@@ -77,35 +94,13 @@ use yii\helpers\Html;
         © 2005-2013 京东网上商城 版权所有，并保留所有权利。  ICP备案证书号:京ICP证070359号
     </p>
     <p class="auth">
-        <a href=""><?=Html::img('@web/images/xin.png')?></a>
-        <a href=""><?=Html::img('@web/images/kexin.jpg')?></a>
-        <a href=""><?=Html::img('@web/images/police.jpg')?></a>
-        <a href=""><?=Html::img('@web/images/beian.gif')?></a>
+        <a href=""><?=\yii\helpers\Html::img('@web/images/xin.png')?></a>
+        <a href=""><?=\yii\helpers\Html::img('@web/images/kexin.jpg')?></a>
+        <a href=""><?=\yii\helpers\Html::img('@web/images/police.jpg')?></a>
+        <a href=""><?=\yii\helpers\Html::img('@web/images/beian.gif')?></a>
     </p>
 </div>
 <!-- 底部版权 end -->
-<script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript">
-    function bindPhoneNum(){
-        //启用输入框
-        $('#captcha').prop('disabled',false);
-
-        var time=30;
-        var interval = setInterval(function(){
-            time--;
-            if(time<=0){
-                clearInterval(interval);
-                var html = '获取验证码';
-                $('#get_captcha').prop('disabled',false);
-            } else{
-                var html = time + ' 秒后再次获取';
-                $('#get_captcha').prop('disabled',true);
-            }
-
-            $('#get_captcha').val(html);
-        },1000);
-    }
-</script>
 
 <?php $this->endBody() ?>
 </body>
