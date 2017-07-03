@@ -12,9 +12,12 @@ use frontend\models\Member;
 use frontend\models\Order;
 use frontend\models\OrderGoods;
 use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Cookie;
 use yii\web\Response;
+use yii\web\UploadedFile;
+
 //https://www.showdoc.cc/1639083?page_id=15066930    463873431    j....
 class ApiController extends Controller{
 
@@ -28,8 +31,17 @@ class ApiController extends Controller{
     public function actionGetGoodsByBrand()//3.根据品牌获取商品API
     {
         if($brand_id = \Yii::$app->request->get('brand_id')){
-            $goods = Goods::find()->where(['brand_id'=>$brand_id])->asArray()->all();
-            return ['status'=>1,'error'=>'','data'=>$goods];
+            //分页
+            $per_page = \Yii::$app->request->get('per_page',4);
+            $per_page = $per_page<3 ? 3 : $per_page;
+            $page = \Yii::$app->request->get('per_page',1);
+            $page = $page<1 ? 1 :$page;
+            $query = Goods::find()->where(['brand_id'=>$brand_id]);
+            $count = $query->count();
+            $goods = $query->offset($per_page*($page-1))->limit($per_page)->asArray()->all();
+
+            //返回商品信息，分页信息
+            return ['total'=>$count,'page'=>$page,'per_page'=>$per_page,'data'=>$goods];
         }
         return ['status'=>-1,'error'=>'参数不正确','data'=>''];
     }
@@ -187,12 +199,38 @@ class ApiController extends Controller{
         }
     }
 
-    public function actionGetGoodsByCategory()//12.根据品牌获取商品API
+    public function actionGetGoodsByCategory()//12.根据商品分类ID获取下面所有商品API
     {
         if($goods_category_id = \Yii::$app->request->get('goods_category_id')){
-            $goods = Goods::find()->where(['goods_category_id'=>$goods_category_id])->all();
-            return ['status'=>1,'error'=>'','data'=>$goods];
-        }
+            //每页显示条数
+            $per_page = \Yii::$app->request->get('per_page',2);
+            //当前第几页
+            $page = \Yii::$app->request->get('page',1);
+            $page = $page < 1?1:$page;
+
+            $query = Goods::find();
+
+            $cate = Goods_Category::findOne(['id'=>$goods_category_id]);//得到该分类
+            if($cate){
+                    switch ($cate->depth){
+                        case 2;//三级分类
+                            $query->andWhere(['goods_category_id'=>$goods_category_id]);
+                            break;
+                        case 1;//二级分类
+                            $ids = ArrayHelper::map($cate->children,'id','id');
+                            $query->andWhere(['in','goods_category_id',$ids]);
+                            break;
+                        case 0;//一级分类,先找二级分类，再找三级分类
+                            $ids = ArrayHelper::map($cate->leaves()->asArray()->all(),'id','id');
+                            $query->andWhere(['in','goods_category_id',$ids]);
+                            break;
+                    }
+                }
+                $total = $query->count();
+
+                $goods = $query->offset($per_page*($page-1))->limit($per_page)->asArray()->all();
+                return ['total'=>$total,'page'=>$page,'per_page'=>$per_page,'data'=>$goods];
+            }
         return ['status'=>-1,'error'=>'参数不正确','data'=>''];
     }
 
@@ -604,11 +642,36 @@ class ApiController extends Controller{
             foreach($goods as $good){
                 $good->delete();//删除订单商品表数据
             }
-            return ['status'=>1,'error'=>'','data'=>'删除成功'];
+            return ['status'=>1,'error'=>'','data'=>'取消成功'];
         }else{
             return ['status'=>-1,'error'=>1,'data'=>'请使用GET方式'];
         }
     }
 
-    
+    public function actionUpload(){
+        if(\Yii::$app->request->isPost){
+            $imgfile = UploadedFile::getInstanceByName('img');
+            if($imgfile){
+                $filename = '/images/'.uniqid().$imgfile->extension;
+                $result = $imgfile->saveAs(\Yii::getAlias('@webroot').$filename,0);
+                if($result){
+                    return ['status'=>1,'error'=>'','data'=>$filename];
+                }
+                return ['status'=>-1,'error'=>1,'data'=>$imgfile->error];
+            }
+           return ['status'=>-1,'error'=>1,'data'=>'没有文件上传'];
+        }else{
+            return ['status'=>-1,'error'=>1,'data'=>'请使用post提交'];
+        }
+    }
+
+    public function actionSendMsg(){
+
+    }
+
+    //高级API
+    //验证码
+    //文件上传
+    //分页
+    //发送短信
 }

@@ -12,9 +12,9 @@ return [
             /**
              * 账号基本信息，请从微信公众平台/开放平台获取
              */
-            'app_id'  => 'wx85adc8c943b8a477',         // AppID
-            'secret'  => 'a687728a72a825812d34f307b630097b',     // AppSecret
-            'token'   => 'your-token',          // Token 支付不需要
+            'app_id'  => 'wx2fd01fef59e55805',         // AppID
+            'secret'  => '02684b9ed3ee6cddf26c3e7286451b15',     // AppSecret
+            'token'   => 'itsource',          // Token 支付不需要
             'aes_key' => '',                    // EncodingAESKey，安全模式下请一定要填写！！！
             /**
              * 日志配置
