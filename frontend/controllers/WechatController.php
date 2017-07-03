@@ -18,7 +18,6 @@ class WechatController extends Controller{
     public function actionIndex(){
         // 使用配置来初始化一个项目。
         $app = new Application(\Yii::$app->params['wechat']);   //option为\Yii::$app->params['wechat']
-
         // 处理自动回复文本
         $app->server->setMessageHandler(function ($message) {
             // $message->FromUserName // 用户的 openid
