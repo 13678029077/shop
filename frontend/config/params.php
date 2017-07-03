@@ -15,7 +15,7 @@ return [
             'app_id'  => 'wx2fd01fef59e55805',         // AppID
             'secret'  => '02684b9ed3ee6cddf26c3e7286451b15',     // AppSecret
             'token'   => 'itsource',          // Token 支付不需要
-            'aes_key' => '',                    // EncodingAESKey，安全模式下请一定要填写！！！
+            'aes_key' => 'itsource',                    // EncodingAESKey，安全模式下请一定要填写！！！
             /**
              * 日志配置
              *
@@ -36,8 +36,8 @@ return [
              * callback：OAuth授权完成后的回调页地址
              */
             'oauth' => [
-                'scopes'   => ['snsapi_userinfo'],
-                'callback' => '/examples/oauth_callback.php',
+                'scopes'   => ['snsapi_base'],
+                'callback' => 'http://phpweixin.itsource.cn/php0217/jw/index.php',
             ],
             /**
              * 微信支付
