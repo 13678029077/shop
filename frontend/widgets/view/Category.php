@@ -1,20 +1,18 @@
 <!--一级分类--->
-<?php foreach ($category as $k=>$item1){?>
-    <div class="cat <?=$k==0?' item1"':'';?>" >
-        <h3><a href="list.html?cate=<?=$item1['id']?>"><?=$item1['name']?></a> <b></b></h3>
+<?php /*foreach ($category as $k=>$item1):*/?><!--
+    <div class="cat <?/*=$k==0?' item1"':'';*/?>" >
+        <h3><a href="list.html?cate=<?/*=$item1['id']*/?>"><?/*=$item1['name']*/?></a> <b></b></h3>
         <div class="cat_detail">
-            <!--二级分类-->
-            <?php foreach ($item1->children as $n=>$item2){?>
-                <dl <?=$k==0?'class="dl_1st"':'';?>>
-                    <dt><a href="list.html?cate=<?=$item2['id']?>"><?=$item2['name']?></a></dt>
+            <?php /*foreach ($item1->children as $n=>$item2):*/?>
+                <dl <?/*=$k==0?'class="dl_1st"':'';*/?>>
+                    <dt><a href="list.html?cate=<?/*=$item2['id']*/?>"><?/*=$item2['name']*/?></a></dt>
                     <dd>
-                        <!--三级分类-->
-                        <?php foreach ($item2->children as $m=>$item3){?>
-                            <a href="list.html?cate=<?=$item3['id']?>"><?=$item3['name']?></a>
-                        <? } ?>
+                        <?php /*foreach ($item2->children as $m=>$item3):*/?>
+                            <a href="list.html?cate=<?/*=$item3['id']*/?>"><?/*=$item3['name']*/?></a>
+                        <?/* endforeach; */?>
                     </dd>
                 </dl>
-            <?php } ?>
+            <?php /*endforeach; */?>
         </div>
     </div>
-<?php } ?>
+--><?php /*endforeach;*/?>

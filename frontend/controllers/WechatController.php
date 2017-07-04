@@ -1,14 +1,13 @@
 <?php
 namespace frontend\controllers;
 
-//include __DIR__ . '/vendor/autoload.php';
 use frontend\models\Member;
 use frontend\models\Order;
 use Overtrue\Wechat\Messages\News;
 use yii\helpers\Url;
 use yii\web\Controller;
 use EasyWeChat\Foundation\Application;
-/*use EasyWeChat\Message\News;*/
+
 
 class WechatController extends Controller{
     //微信开发依赖的插件  easyWechat
