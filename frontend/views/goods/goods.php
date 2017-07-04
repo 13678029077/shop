@@ -43,7 +43,7 @@
                 <ul>
                     <li>
                         <dl>
-                            <dt><a href=""><?=\yii\helpers\Html::img(Yii::getAlias('@web/images/relate_view1.jpg'))?></a></dt>
+                            <dt><a href=""><?php echo \yii\helpers\Html::img(Yii::getAlias('@web/images/relate_view1.jpg'))?></a></dt>
                             <dd><a href="">ThinkPad E431(62771A7) 14英寸笔记本电脑 (i5-3230 4G 1TB 2G独显 蓝牙 win8)</a></dd>
                             <dd><strong>￥5199.00</strong></dd>
                         </dl>
@@ -115,7 +115,7 @@
             <!-- 图片预览区域 start -->
             <div class="preview fl">
                 <div class="midpic">
-                    <a href="http://admin.shop.com/<?=$goods_pic[1]['img']?>"  class="jqzoom" rel="gal1">                       <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
+                    <a href="http://admin.shop.com/<?php echo $goods_pic[1]['img']?>"  class="jqzoom" rel="gal1">                       <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
                     <?=\yii\helpers\Html::img(Yii::getAlias('http://admin.shop.com'.$goods_pic[1]['img']),['style'=>'width:350px;height:348px'])?>
                                      <!-- 第一幅图片的中图 -->
                     </a>

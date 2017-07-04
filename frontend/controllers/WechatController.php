@@ -8,13 +8,13 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use EasyWeChat\Foundation\Application;
 
-
 class WechatController extends Controller{
     //微信开发依赖的插件  easyWechat
     //关闭csrf验证
     public $enableCsrfValidation = false;
 
     public function actionIndex(){
+
         // 使用配置来初始化一个项目。
         $app = new Application(\Yii::$app->params['wechat']);   //option为\Yii::$app->params['wechat']
         // 处理自动回复文本

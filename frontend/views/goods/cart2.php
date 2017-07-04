@@ -136,7 +136,7 @@ $this->registerJsFile('@web/js/cart2.js',['depends'=>\yii\web\JqueryAsset::class
                     <td class="col4"><?=$good['amount']?></td>
                     <td class="col5"><span>￥<?=number_format($good['amount']*$good['shop_price'],2,'.','')?></span></td>
                 </tr>
-                <?
+                <?php
                 $money += $good['shop_price']*$good['amount'];
                 $count++;
                 endforeach;?>
